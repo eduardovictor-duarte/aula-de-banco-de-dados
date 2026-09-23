@@ -1,0 +1,102 @@
+-- 1. Criação do Banco de Dados (corrigido "bd_revisao")
+CREATE DATABASE bd_revisao01;
+USE bd_revisao01;
+
+-- 2. Criação das tabelas base
+CREATE TABLE tb_cliente (
+    cd_cliente INT NOT NULL PRIMARY KEY, 
+    cliente CHAR(50)
+);
+
+-- Corrigido de "tb_vendendor" para "tb_vendedor"
+-- Corrigido de "cd_vendendor" para "cd_vendedor"
+CREATE TABLE tb_vendedor (
+    cd_vendedor INT NOT NULL PRIMARY KEY, 
+    vendedor CHAR(50)
+);
+
+CREATE TABLE tb_veiculo (
+    cd_veiculo INT NOT NULL PRIMARY KEY, 
+    veiculo CHAR(50), 
+    valor_veiculo DECIMAL(12,2)
+);
+
+-- 3. Criação da tabela de pedidos
+CREATE TABLE tb_pedido (
+    dt_pedido DATE NOT NULL,
+    cd_veiculo INT NOT NULL,
+    cd_cliente INT NOT NULL,
+    cd_vendedor INT NOT NULL,
+    nr_pedido INT NOT NULL,
+    valor_pedido DECIMAL(12,2),
+    comissao DECIMAL(12,2),
+    PRIMARY KEY (dt_pedido, cd_veiculo, cd_cliente, cd_vendedor)
+);
+
+-- 4. Criação dos relacionamentos (Chaves Estrangeiras)
+-- 7 tb_pedido x tb_cliente
+ALTER TABLE tb_pedido 
+ADD CONSTRAINT fk_cliente FOREIGN KEY (cd_cliente) 
+REFERENCES tb_cliente (cd_cliente); 
+
+-- 8 tb_pedido x tb_vendedor (agora o nome da tabela e coluna batem perfeitamente)
+ALTER TABLE tb_pedido 
+ADD CONSTRAINT fk_vendedor FOREIGN KEY (cd_vendedor) 
+REFERENCES tb_vendedor (cd_vendedor);  
+
+-- 9 tb_pedido x tb_veiculo 
+ALTER TABLE tb_pedido 
+ADD CONSTRAINT fk_veiculo FOREIGN KEY (cd_veiculo) 
+REFERENCES tb_veiculo (cd_veiculo);
+
+-- vendedor
+
+select * from tb_vendedor;
+
+Insert into tb_vendedor
+(cd_vendedor, vendedor)
+Values
+(1, 'Anibal'),
+(2, 'Antonio de Moraes'), 
+(3, 'Barbara Alcantara'), 
+(4, 'Deise Castro'),
+(5, 'Eider Nascimento');
+
+select * from tb_cliente; 
+
+Insert into tb_cliente
+(cd_cliente, cliente) 
+Values 
+(1, 'Vallu Nascimento'),
+(2, 'Rogeria Negreti'),
+(3, 'Henrique Silva'),
+(4, 'Wellington Alves'),
+(5, 'Jose Pereira');
+
+select * from tb_veiculo; 
+
+Insert into tb_veiculo
+(cd_veiculo, veiculo, valor_veiculo) 
+Values
+(1, 'Onix', 52000),
+(2, 'Prisma', 49000),
+(3, 'S10', 109000),
+(4, 'Cruze', 101000),
+(5, 'Spin', 69000),
+(6, 'Cobalt', 63000);
+
+select * from tb_pedido;
+
+insert into tb_pedido
+(nr_pedido, dt_pedido, cd_veiculo, cd_cliente, cd_vendedor, valor_pedido,comissao)
+values
+(1,'2019-01-10',1,2,3,52000,0),
+(2,'2019-02-20',2,3,4,49000,0),
+(3,'2019-03-30',3,4,5,109000,0),
+(4,'2019-04-10',4,5,1,101000,0),
+(5,'2019-05-20',5,5,1,69000,0),
+(6,'2019-06-30',6,1,2,63000,0),
+(7,'2019-07-10',1,4,5,52000,0),
+(8,'2019-08-20',1,4,5,52000,0),
+(9,'2019-09-30',1,4,5,52000,0),
+(10,'2019-10-10',1,4,5,52000,0);
